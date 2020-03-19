@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">YourMission</string>
+    <string name="namaTugas">Contoh Judul Tugas</string>
+    <string name="descTugas">Ini merupakan deskripsi tugas.</string>
+    <string name="tanggalDeadline">31</string>
+    <string name="bulanDeadline">MAR</string>
+    <string name="tahunDeadline">2020</string>
+</resources>
