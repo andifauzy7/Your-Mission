@@ -7,8 +7,22 @@
     tools:context=".DetailTask">
 
     <TextView
-        android:id="@+id/id"
+        android:id="@+id/namaTugas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/namaTugas" />
+
+    <TextView
+        android:id="@+id/descTugas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/namaTugas"
+        android:text="@string/descTugas" />
+
+    <TextView
+        android:id="@+id/deadlineTugas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/descTugas"
         android:text="TextView" />
 </RelativeLayout>

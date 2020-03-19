@@ -2,6 +2,7 @@ package com.example.yourmission;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,9 +38,13 @@ public class CardViewTaskAdapter extends RecyclerView.Adapter<CardViewTaskAdapte
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Integer index = position;
+                // Lokasi Passing Data
+                Bundle bundle = new Bundle();
+                bundle.putString("namaTugas", task.getTaskName());
+                bundle.putString("descTugas", task.getDescTask());
+                bundle.putString("deadlineTugas", task.getTanggal() + task.getBulan() + task.getTahun());
                 Intent moveIntent = new Intent(v.getContext(), DetailTask.class);
-                moveIntent.putExtra(DetailTask.ID_TASK, index.toString());
+                moveIntent.putExtras(bundle);
                 v.getContext().startActivity(moveIntent);
                 //Toast.makeText(holder.itemView.getContext(),listTask.get(holder.getAdapterPosition()).getTaskName(), Toast.LENGTH_SHORT).show();
             }

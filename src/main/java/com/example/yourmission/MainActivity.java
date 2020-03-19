@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -31,10 +32,8 @@ public class MainActivity extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder dialog;
-                dialog = new AlertDialog.Builder(MainActivity.this);
-                dialog.setTitle("Buat Task Baru");
-                dialog.show();
+                Intent moveIntent = new Intent(MainActivity.this, addTask.class);
+                startActivity(moveIntent);
             }
         });
     }
