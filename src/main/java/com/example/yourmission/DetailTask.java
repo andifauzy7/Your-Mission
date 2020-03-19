@@ -10,7 +10,8 @@ public class DetailTask extends AppCompatActivity {
     TextView title, desc, dateDeadline;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Bundle diterima dari CardViewTaskAdapter
+        setTitle("Detail Mission");
+        // Passing Data Bundle diterima dari CardViewTaskAdapter
         Bundle bundle = getIntent().getExtras();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_task);
