@@ -65,6 +65,13 @@ public class MainActivity extends AppCompatActivity {
                     // Refresh ulang isi Card.
                     list.add(aTask);
                     showRecyclerCardView();
+
+                    // Coba ke DB.
+                    DBAdapter db = new DBAdapter(this);
+                    db.open();
+                    long id = db.insertTask(namaTugas, descTugas, dateTugas);
+                    db.close();
+
                     Toast.makeText(this, "Data berhasil disimpan.", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(this, "Tambah Task dibatalkan.", Toast.LENGTH_LONG).show();
