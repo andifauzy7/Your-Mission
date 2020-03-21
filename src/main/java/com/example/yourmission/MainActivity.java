@@ -69,7 +69,9 @@ public class MainActivity extends AppCompatActivity {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
+                    // Refresh ulang isi Card.
                     list.add(aTask);
+                    showRecyclerCardView();
                     Toast.makeText(this, "Data berhasil disimpan.", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(this, "Tambah Task dibatalkan.", Toast.LENGTH_LONG).show();
