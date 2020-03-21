@@ -1,6 +1,5 @@
 package com.example.yourmission;
 
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,7 +34,6 @@ public class Task {
     public String getTahun(){
         return String.format("%tY",this.dateTask);
     }
-
 
     public String getTaskName() {
         return taskName;

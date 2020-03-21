@@ -6,14 +6,12 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -26,7 +24,6 @@ public class addTask extends AppCompatActivity {
         setTitle("Add Mission");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
-
         setupDateButton();
         setupSubmitButton();
     }
@@ -34,7 +31,6 @@ public class addTask extends AppCompatActivity {
     private void setupDateButton(){
         Button datePicker  = (Button)findViewById(R.id.datePicker);
         this.dateView = (TextView)findViewById(R.id.dateView);
-
         datePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,7 +62,6 @@ public class addTask extends AppCompatActivity {
                 String sNamaTugas  = namaTugas.getText().toString();
                 String sDescTugas  = descTugas.getText().toString();
                 String sDateTugas  = dateView.getText().toString();
-
                 // Pass data.
                 if(sNamaTugas.equals("") && sDescTugas.equals("") && sDateTugas.equals("")){
                     Toast.makeText(addTask.this,"Data task kurang lengkap.",Toast.LENGTH_SHORT).show();
