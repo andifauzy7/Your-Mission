@@ -1,15 +1,41 @@
 package com.example.yourmission;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Task {
     private String taskName;
     private String descTask;
-    private Date timeTask;
-    {
-        timeTask = new Date();
+    private String sDateTask;
+    private Date dateTask;
+
+    public Task(String aTaskName, String aDescTask, String aDateTask) throws ParseException {
+        this.taskName = aTaskName;
+        this.descTask = aDescTask;
+        this.sDateTask = aDateTask;
+        this.dateTask   = new SimpleDateFormat("dd-MMM-yyyy").parse(this.sDateTask);
     }
+
+
+    public void setDateTask(String dateTask) throws ParseException {
+        this.sDateTask  = dateTask;
+        this.dateTask   = new SimpleDateFormat("dd-MMM-yyyy").parse(this.sDateTask);
+    }
+
+    public String getTanggal(){
+        return String.format("%td",this.dateTask);
+    }
+
+    public String getBulan(){
+        return String.format("%tb",this.dateTask).toUpperCase();
+    }
+
+    public String getTahun(){
+        return String.format("%tY",this.dateTask);
+    }
+
 
     public String getTaskName() {
         return taskName;
@@ -27,16 +53,5 @@ public class Task {
         this.descTask = descTask;
     }
 
-    public String getTanggal(){
-        return String.format("%td",this.timeTask);
-    }
-
-    public String getBulan(){
-        return String.format("%tb",this.timeTask).toUpperCase();
-    }
-
-    public String getTahun(){
-        return String.format("%tY",this.timeTask);
-    }
 }
 

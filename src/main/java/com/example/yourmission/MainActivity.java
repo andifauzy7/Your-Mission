@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,7 +30,11 @@ public class MainActivity extends AppCompatActivity {
         rvTask = findViewById(R.id.rv_task);
         rvTask.setHasFixedSize(true);
 
-        list.addAll(TaskData.getListData());
+        try {
+            list.addAll(TaskData.getListData());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         showRecyclerCardView();
 
         addButton = findViewById(R.id.add_button);
@@ -51,12 +56,23 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        switch (requestCode){
+        switch (requestCode) {
             case REQUEST_CODE_GETMESSAGE:
-                if(resultCode==Activity.RESULT_OK){
-                    Toast.makeText(this, "Mantul",Toast.LENGTH_LONG).show();
+                if (resultCode == Activity.RESULT_OK) {
+                    Bundle bundle = data.getExtras();
+                    String namaTugas = bundle.getString("namaTugas");
+                    String descTugas = bundle.getString("descTugas");
+                    String dateTugas = bundle.getString("dateTugas");
+                    Task aTask = null;
+                    try {
+                        aTask = new Task(namaTugas, descTugas, dateTugas);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    list.add(aTask);
+                    Toast.makeText(this, "Data berhasil disimpan.", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(this, "Mencet tombol back",Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Tambah Task dibatalkan.", Toast.LENGTH_LONG).show();
                 }
         }
     }

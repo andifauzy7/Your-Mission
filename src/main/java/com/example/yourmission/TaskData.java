@@ -1,5 +1,6 @@
 package com.example.yourmission;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public class TaskData {
@@ -25,12 +26,21 @@ public class TaskData {
             "Memmbuat langkah Statistika Deskriptif"
     };
 
-    static ArrayList<Task> getListData() {
+    private static String[] taskDeadline = {
+            "12-APR-2020",
+            "02-MAY-2020",
+            "03-MAY-2020",
+            "10-JUN-2020",
+            "08-JUN-2020",
+            "12-JUL-2020",
+            "13-JUL-2020",
+            "21-AUG-2020"
+    };
+
+    static ArrayList<Task> getListData() throws ParseException {
         ArrayList<Task> list = new ArrayList<>();
         for (int position = 0; position < taskName.length; position++) {
-            Task task = new Task();
-            task.setTaskName(taskName[position]);
-            task.setDescTask(taskDetails[position]);
+            Task task = new Task(taskName[position], taskDetails[position], taskDeadline[position]);
             list.add(task);
         }
         return list;

@@ -6,20 +6,21 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.util.BitSet;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 public class addTask extends AppCompatActivity {
-
+    private TextView dateView;
+    private EditText namaTugas, descTugas;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTitle("Add Mission");
@@ -32,7 +33,7 @@ public class addTask extends AppCompatActivity {
 
     private void setupDateButton(){
         Button datePicker  = (Button)findViewById(R.id.datePicker);
-        final TextView dateView = (TextView)findViewById(R.id.dateView);
+        this.dateView = (TextView)findViewById(R.id.dateView);
 
         datePicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,7 +49,7 @@ public class addTask extends AppCompatActivity {
                     }
 
                 },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-
+                datePickerDialog.getDatePicker().setMinDate(newCalendar.getTimeInMillis());
                 datePickerDialog.show();
             }
         });
@@ -60,14 +61,25 @@ public class addTask extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Extract data.
-                // String sNamaTugas  = namaTugas.getText().toString();
-                // String sDescTugas  = descTugas.getText().toString();
-
+                namaTugas = (EditText)findViewById(R.id.txNamaTugas);
+                descTugas = (EditText)findViewById(R.id.txDescTugas);
+                String sNamaTugas  = namaTugas.getText().toString();
+                String sDescTugas  = descTugas.getText().toString();
+                String sDateTugas  = dateView.getText().toString();
 
                 // Pass data.
-                Intent moveIntent = new Intent();
-                setResult(Activity.RESULT_OK, moveIntent);
-                finish();
+                if(sNamaTugas.equals("") && sDescTugas.equals("") && sDateTugas.equals("")){
+                    Toast.makeText(addTask.this,"Data task kurang lengkap.",Toast.LENGTH_SHORT).show();
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("namaTugas", sNamaTugas);
+                    bundle.putString("descTugas", sDescTugas);
+                    bundle.putString("dateTugas", sDateTugas);
+                    Intent moveIntent = new Intent();
+                    moveIntent.putExtras(bundle);
+                    setResult(Activity.RESULT_OK, moveIntent);
+                    finish();
+                }
             }
         });
     }
