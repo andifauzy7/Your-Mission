@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -14,10 +15,12 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    public static final int REQUEST_CODE_GETMESSAGE = 1;
+    // Kamus Data.
+    public static final int REQUEST_CODE_ADD = 1;
+    DBAdapter db = new DBAdapter(this);
+    private ArrayList<Task> list = new ArrayList<>();
     FloatingActionButton addButton;
     private RecyclerView rvTask;
-    private ArrayList<Task> list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,22 +28,26 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         rvTask = findViewById(R.id.rv_task);
         rvTask.setHasFixedSize(true);
-        try {
-            list.addAll(TaskData.getListData());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
+        selectAllTaskFromDatabase();
+        setupAddButton();
         showRecyclerCardView();
+
+    }
+
+    // Jika tombol Add task di tap.
+    private void setupAddButton(){
         addButton = findViewById(R.id.add_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent moveIntent = new Intent(MainActivity.this, addTask.class);
-                startActivityForResult(moveIntent, REQUEST_CODE_GETMESSAGE);
+                startActivityForResult(moveIntent, REQUEST_CODE_ADD);
             }
         });
     }
 
+    // Memperbaharui dan menampilkan Recycler View.
     private void showRecyclerCardView(){
         rvTask.setLayoutManager(new LinearLayoutManager(this));
         CardViewTaskAdapter cardViewHeroAdapter = new CardViewTaskAdapter(list);
@@ -50,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         switch (requestCode) {
-            case REQUEST_CODE_GETMESSAGE:
+            case REQUEST_CODE_ADD:
                 if (resultCode == Activity.RESULT_OK) {
                     Bundle bundle = data.getExtras();
                     String namaTugas = bundle.getString("namaTugas");
@@ -62,20 +69,38 @@ public class MainActivity extends AppCompatActivity {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    // Refresh ulang isi Card.
-                    list.add(aTask);
-                    showRecyclerCardView();
-
                     // Coba ke DB.
-                    DBAdapter db = new DBAdapter(this);
-                    db.open();
-                    long id = db.insertTask(namaTugas, descTugas, dateTugas);
-                    db.close();
-
+                    insertTaskToDatabase(aTask);
+                    selectAllTaskFromDatabase();
+                    showRecyclerCardView();
                     Toast.makeText(this, "Data berhasil disimpan.", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(this, "Tambah Task dibatalkan.", Toast.LENGTH_LONG).show();
                 }
         }
     }
+
+    // Insert data Task ke dalam Database.
+    private void insertTaskToDatabase(Task aTask){
+        db.open();
+        long id = db.insertTask(aTask.getTaskName(), aTask.getDescTask(), aTask.getsDateTask());
+        db.close();
+    }
+
+    // Select semua data dari Database.
+    private void selectAllTaskFromDatabase(){
+        db.open();
+        Cursor c = db.getAllTask();
+        if(c.moveToFirst()){
+            do {
+                try {
+                    list.add(new Task(c.getString(0),c.getString(1),c.getString(2),c.getString(3)));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }while (c.moveToNext());
+        }
+        db.close();
+    }
+
 }

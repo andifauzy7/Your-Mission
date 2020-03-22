@@ -2,6 +2,7 @@ package com.example.yourmission;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -72,4 +73,26 @@ public class DBAdapter {
         return db.insert(DB_TABLE, null, initialValues);
     }
 
+    // Retrieve data.
+    public Cursor getAllTask(){
+        return db.query(DB_TABLE, new String[] {KEY_ROWID, KEY_NAME, KEY_DESC, KEY_DATE}, null, null, null, null, null);
+    }
+
+    // retrieve a particular contacts.
+    public Cursor getTask(long RowId) throws SQLException {
+        Cursor mCursor = db.query(true, DB_TABLE, new String[] {KEY_ROWID, KEY_NAME, KEY_DESC, KEY_DATE}, KEY_ROWID + "=" + RowId, null, null, null, null, null);
+        if(mCursor != null){
+            mCursor.moveToFirst();
+        }
+        return mCursor;
+    }
+
+    // Update Task.
+    public boolean updateTask(long RowId, String name, String description, String date){
+        ContentValues args = new ContentValues();
+        args.put(KEY_NAME, name);
+        args.put(KEY_DESC, description);
+        args.put(KEY_DATE, date);
+        return db.update(DB_TABLE, args, KEY_ROWID + "=" + RowId, null) > 0;
+    }
 }

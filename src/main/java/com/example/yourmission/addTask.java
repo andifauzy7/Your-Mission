@@ -28,6 +28,7 @@ public class addTask extends AppCompatActivity {
         setupSubmitButton();
     }
 
+    // Jika tombol setting tanggal ditap.
     private void setupDateButton(){
         Button datePicker  = (Button)findViewById(R.id.datePicker);
         this.dateView = (TextView)findViewById(R.id.dateView);
@@ -51,6 +52,7 @@ public class addTask extends AppCompatActivity {
         });
     }
 
+    // Jika tombol sumbit ditap.
     private void setupSubmitButton(){
         Button btn = (Button)findViewById(R.id.submitData);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +65,7 @@ public class addTask extends AppCompatActivity {
                 String sDescTugas  = descTugas.getText().toString();
                 String sDateTugas  = dateView.getText().toString();
                 // Pass data.
-                if(sNamaTugas.equals("") && sDescTugas.equals("") && sDateTugas.equals("")){
+                if(sNamaTugas.equals("") || sDescTugas.equals("") || sDateTugas.equals("")){
                     Toast.makeText(addTask.this,"Data task kurang lengkap.",Toast.LENGTH_SHORT).show();
                 } else {
                     Bundle bundle = new Bundle();

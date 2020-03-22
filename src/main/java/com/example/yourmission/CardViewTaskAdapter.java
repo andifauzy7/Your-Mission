@@ -38,13 +38,13 @@ public class CardViewTaskAdapter extends RecyclerView.Adapter<CardViewTaskAdapte
             public void onClick(View v) {
                 // Lokasi Passing Data
                 Bundle bundle = new Bundle();
+                bundle.putString("rowId", task.getRowId());
                 bundle.putString("namaTugas", task.getTaskName());
                 bundle.putString("descTugas", task.getDescTask());
-                bundle.putString("deadlineTugas", task.getTanggal() + task.getBulan() + task.getTahun());
+                bundle.putString("deadlineTugas", task.getTanggal() + "-" + task.getBulan() + "-" + task.getTahun());
                 Intent moveIntent = new Intent(v.getContext(), DetailTask.class);
                 moveIntent.putExtras(bundle);
                 v.getContext().startActivity(moveIntent);
-                //Toast.makeText(holder.itemView.getContext(),listTask.get(holder.getAdapterPosition()).getTaskName(), Toast.LENGTH_SHORT).show();
             }
         });
     }
