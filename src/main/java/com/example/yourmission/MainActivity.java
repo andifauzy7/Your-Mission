@@ -1,7 +1,9 @@
 package com.example.yourmission;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
@@ -11,28 +13,74 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
     // Kamus Data.
     public static final int REQUEST_CODE_ADD = 1;
     DBAdapter db = new DBAdapter(this);
     private ArrayList<Task> list = new ArrayList<>();
     FloatingActionButton addButton;
-    private RecyclerView rvTask;
+    private RecyclerView recyclerView;
+    CardViewTaskAdapter Adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        rvTask = findViewById(R.id.rv_task);
-        rvTask.setHasFixedSize(true);
-
         selectAllTaskFromDatabase();
+        // Menampilkan Card View.
+        recyclerView = findViewById(R.id.rv_task);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        Adapter = new CardViewTaskAdapter(list, MainActivity.this);
+        recyclerView.setAdapter(Adapter);
+        // Swipe to Delete.
+        deleteData();
+        // Tap tombol add.
         setupAddButton();
-        showRecyclerCardView();
+    }
 
+    // Swipe delete
+    private void deleteData(){
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                final int position = viewHolder.getAdapterPosition();
+                final Integer aRowId = Integer.parseInt(list.get(position).getRowId());
+                final String aTaskName = list.get(position).getTaskName();
+                final String aTaskDesc = list.get(position).getDescTask();
+                final String aTaskDate = list.get(position).getsDateTask();
+                list.remove(position);
+                Toast.makeText(MainActivity.this, "Item Removed" + position, Toast.LENGTH_SHORT).show();
+                Adapter.notifyItemRemoved(position);
+                db.open();
+                db.deleteContact(aRowId);
+                db.close();
+                Snackbar.make(recyclerView, aTaskName, Snackbar.LENGTH_LONG)
+                        .setAction("Undo", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                    list.add(position, new Task(aTaskName, aTaskDesc, aTaskDate));
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                db.open();
+                                db.insertTask(aRowId.toString(), aTaskName, aTaskDesc, aTaskDate);
+                                db.close();
+                                Adapter.notifyItemInserted(position);
+                            }
+                        }).show();
+            }
+        }).attachToRecyclerView(recyclerView);
     }
 
     // Jika tombol Add task di tap.
@@ -45,13 +93,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(moveIntent, REQUEST_CODE_ADD);
             }
         });
-    }
-
-    // Memperbaharui dan menampilkan Recycler View.
-    private void showRecyclerCardView(){
-        rvTask.setLayoutManager(new LinearLayoutManager(this));
-        CardViewTaskAdapter cardViewHeroAdapter = new CardViewTaskAdapter(list);
-        rvTask.setAdapter(cardViewHeroAdapter);
     }
 
     @Override
@@ -72,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                     // Coba ke DB.
                     insertTaskToDatabase(aTask);
                     selectAllTaskFromDatabase();
-                    showRecyclerCardView();
+                    Adapter.notifyDataSetChanged();
                     Toast.makeText(this, "Data berhasil disimpan.", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(this, "Tambah Task dibatalkan.", Toast.LENGTH_LONG).show();

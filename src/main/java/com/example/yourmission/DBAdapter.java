@@ -73,6 +73,15 @@ public class DBAdapter {
         return db.insert(DB_TABLE, null, initialValues);
     }
 
+    public long insertTask(String rowId, String nameTask, String descTask, String deadlineTask){
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(KEY_ROWID, rowId);
+        initialValues.put(KEY_NAME, nameTask);
+        initialValues.put(KEY_DESC, descTask);
+        initialValues.put(KEY_DATE, deadlineTask);
+        return db.insert(DB_TABLE, null, initialValues);
+    }
+
     // Retrieve data.
     public Cursor getAllTask(){
         return db.query(DB_TABLE, new String[] {KEY_ROWID, KEY_NAME, KEY_DESC, KEY_DATE}, null, null, null, null, null);
@@ -94,5 +103,10 @@ public class DBAdapter {
         args.put(KEY_DESC, description);
         args.put(KEY_DATE, date);
         return db.update(DB_TABLE, args, KEY_ROWID + "=" + RowId, null) > 0;
+    }
+
+    // Delete Task.
+    public boolean deleteContact(long rowId){
+        return db.delete(DB_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
     }
 }

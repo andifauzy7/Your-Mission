@@ -1,5 +1,6 @@
 package com.example.yourmission;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -7,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,8 +17,10 @@ import java.util.ArrayList;
 
 public class CardViewTaskAdapter extends RecyclerView.Adapter<CardViewTaskAdapter.CardViewViewHolder> {
     private ArrayList<Task> listTask;
-    public CardViewTaskAdapter(ArrayList<Task> list) {
+    private Context context;
+    public CardViewTaskAdapter(ArrayList<Task> list, Context aContext) {
         this.listTask = list;
+        this.context = aContext;
     }
     @NonNull
     @Override
