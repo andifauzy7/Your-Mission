@@ -41,7 +41,9 @@ public class MainActivity extends AppCompatActivity{
         deleteData();
         // Tap tombol add.
         setupAddButton();
+
     }
+
 
     // Swipe delete
     private void deleteData(){
@@ -54,33 +56,40 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 final int position = viewHolder.getAdapterPosition();
-                final Integer aRowId = Integer.parseInt(list.get(position).getRowId());
                 final String aTaskName = list.get(position).getTaskName();
                 final String aTaskDesc = list.get(position).getDescTask();
                 final String aTaskDate = list.get(position).getsDateTask();
                 list.remove(position);
                 Toast.makeText(MainActivity.this, "Item Removed" + position, Toast.LENGTH_SHORT).show();
                 Adapter.notifyItemRemoved(position);
+
                 db.open();
-                db.deleteContact(aRowId);
+                db.deleteContact(position);
                 db.close();
+
                 Snackbar.make(recyclerView, aTaskName, Snackbar.LENGTH_LONG)
                         .setAction("Undo", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                Task aTask = null;
                                 try {
-                                    list.add(position, new Task(aTaskName, aTaskDesc, aTaskDate));
+                                    aTask = new Task(aTaskName, aTaskDesc, aTaskDate);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
+
                                 db.open();
-                                db.insertTask(aRowId.toString(), aTaskName, aTaskDesc, aTaskDate);
+                                db.insertTask(String.valueOf(position), aTaskName, aTaskDesc, aTaskDate);
                                 db.close();
+
+                                list.add(position, aTask);
                                 Adapter.notifyItemInserted(position);
                             }
                         }).show();
             }
         }).attachToRecyclerView(recyclerView);
+
+
     }
 
     // Jika tombol Add task di tap.
