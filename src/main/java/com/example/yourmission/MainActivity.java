@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -78,8 +80,8 @@ public class MainActivity extends AppCompatActivity{
                             public void onClick(View v) {
                                 Task aTask = null;
                                 try {
-                                    String date = aTaskDate;
-                                    Date aDate = new SimpleDateFormat("dd-MMM-yyyy").parse(date);
+                                    @SuppressLint("SimpleDateFormat")
+                                    Date aDate = new SimpleDateFormat("dd-MMM-yyyy").parse(aTaskDate);
                                     aTask = new Task(aTaskName, aTaskDesc, aDate);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
@@ -111,17 +113,22 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
+    @SuppressLint("SimpleDateFormat")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case REQUEST_CODE_ADD:
                 if (resultCode == Activity.RESULT_OK) {
+                    assert data != null;
                     Bundle bundle = data.getExtras();
+                    assert bundle != null;
                     String namaTugas = bundle.getString("namaTugas");
                     String descTugas = bundle.getString("descTugas");
                     String dateTugas = bundle.getString("dateTugas");
-                    Date aDateTugas  = null;
+                    Date aDateTugas = null;
                     try {
+                        assert dateTugas != null;
                         aDateTugas = new SimpleDateFormat("dd-MMM-yyyy").parse(dateTugas);
                     } catch (ParseException e) {
                         e.printStackTrace();
@@ -141,8 +148,9 @@ public class MainActivity extends AppCompatActivity{
     // Insert data Task ke dalam Database.
     private void insertTaskToDatabase(Task aTask){
         db.open();
-        String dateTask = aTask.getDateTask();
-        long id = db.insertTask(aTask.getTaskName(), aTask.getDescTask(), dateTask);
+        String dateTask;
+        dateTask = aTask.getDateTask();
+        db.insertTask(aTask.getTaskName(), aTask.getDescTask(), dateTask);
         db.close();
     }
 
@@ -154,7 +162,7 @@ public class MainActivity extends AppCompatActivity{
             do {
                 try {
                     String date = c.getString(3);
-                    Date aDate = new SimpleDateFormat("dd-MMM-yyyy").parse(date);
+                    @SuppressLint("SimpleDateFormat") Date aDate = new SimpleDateFormat("dd-MMM-yyyy").parse(date);
                     list.add(new Task(c.getLong(0),c.getString(1),c.getString(2),aDate));
                 } catch (ParseException e) {
                     e.printStackTrace();
