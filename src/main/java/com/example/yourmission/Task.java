@@ -1,37 +1,53 @@
 package com.example.yourmission;
 import android.annotation.SuppressLint;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.util.Date;
 
+@Entity(tableName = "task_table")
 class Task {
-
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "taskId")
     private long rowId;
+    @ColumnInfo(name = "taskName")
     private String taskName;
+    @ColumnInfo(name = "descTask")
     private String descTask;
-    private Date dateTask;
+    @ColumnInfo(name = "dateTask")
+    private String textDateTask;
 
     // Constructor.
-    Task(String aTaskName, String aDescTask, Date aDate) {
-        this.taskName = aTaskName;
-        this.descTask = aDescTask;
-        this.dateTask   = aDate;
+    public Task(){
+
     }
 
-    Task(long rowId, String aTaskName, String aDescTask, Date aDateTask) {
+    // Setter
+    public void setTextDateTask(String textDateTask) {
+        this.textDateTask = textDateTask;
+    }
+
+    public void setRowId(long rowId) {
         this.rowId = rowId;
-        this.taskName = aTaskName;
-        this.descTask = aDescTask;
-        this.dateTask   = aDateTask;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
+
+    public void setDescTask(String descTask) {
+        this.descTask = descTask;
     }
 
     // Getter.
-    long getRowId() {
-        return rowId;
+    public String getTextDateTask() {
+        return textDateTask;
     }
 
-    @SuppressLint("DefaultLocale")
-    String getDateTask(){
-        return String.format("%td-%tb-%tY", this.dateTask, this.dateTask, this.dateTask);
+    long getRowId() {
+        return rowId;
     }
 
     String getTaskName() {
@@ -42,17 +58,17 @@ class Task {
         return descTask;
     }
 
-    @SuppressLint("DefaultLocale")
     String getTanggal(){
-        return String.format("%td",this.dateTask);
+        return textDateTask.substring(0,2);
     }
 
     String getBulan(){
-        return String.format("%tb",this.dateTask).toUpperCase();
+        return textDateTask.substring(3,6);
     }
 
     String getTahun(){
-        return String.format("%tY",this.dateTask);
+        return textDateTask.substring(7);
     }
+
 }
 

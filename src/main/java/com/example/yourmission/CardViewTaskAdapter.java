@@ -1,5 +1,6 @@
 package com.example.yourmission;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,12 +12,19 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CardViewTaskAdapter extends RecyclerView.Adapter<CardViewTaskAdapter.CardViewViewHolder> {
-    private ArrayList<Task> listTask;
+    private List<Task> listTask;
+    private final LayoutInflater mInflater;
 
-    CardViewTaskAdapter(ArrayList<Task> list) {
-        this.listTask = list;
+    void setListTask(List<Task> task) {
+        listTask = task;
+        notifyDataSetChanged();
+    }
+
+    CardViewTaskAdapter(Context context) {
+        mInflater = LayoutInflater.from(context);
     }
     @NonNull
     @Override
@@ -27,6 +35,7 @@ public class CardViewTaskAdapter extends RecyclerView.Adapter<CardViewTaskAdapte
 
     @Override
     public void onBindViewHolder(@NonNull final CardViewViewHolder holder, final int position) {
+
         final Task task = listTask.get(position);
         holder.cardView.setBackgroundColor(Color.rgb(255,255,255));
         holder.namaTugas.setText(task.getTaskName());

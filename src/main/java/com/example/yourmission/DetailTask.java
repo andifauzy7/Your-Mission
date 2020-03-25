@@ -17,7 +17,9 @@ import java.util.Locale;
 public class DetailTask extends AppCompatActivity {
     EditText namaTugas, descTugas;
     TextView deadlineTugas;
+    /*
     DBAdapter db = new DBAdapter(this);
+    */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTitle("Detail Mission");
@@ -61,6 +63,7 @@ public class DetailTask extends AppCompatActivity {
 
     // Jika tombol sumbit ditap.
     private void setupSubmitButton(final long srowId){
+        /*
         Button btn = findViewById(R.id.submitData);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,5 +87,6 @@ public class DetailTask extends AppCompatActivity {
                 }
             }
         });
+    */
     }
 }
