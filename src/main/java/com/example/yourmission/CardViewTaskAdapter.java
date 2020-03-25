@@ -43,7 +43,7 @@ public class CardViewTaskAdapter extends RecyclerView.Adapter<CardViewTaskAdapte
             public void onClick(View v) {
                 // Lokasi Passing Data
                 Bundle bundle = new Bundle();
-                bundle.putString("rowId", task.getRowId());
+                bundle.putString("rowId", task.getsRowId());
                 bundle.putString("namaTugas", task.getTaskName());
                 bundle.putString("descTugas", task.getDescTask());
                 bundle.putString("deadlineTugas", task.getTanggal() + "-" + task.getBulan() + "-" + task.getTahun());

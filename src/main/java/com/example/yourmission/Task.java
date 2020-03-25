@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class Task {
 
-    private String rowId;
+    private long rowId;
     private String taskName;
     private String descTask;
     private String sDateTask;
@@ -19,7 +19,7 @@ public class Task {
         this.dateTask   = new SimpleDateFormat("dd-MMM-yyyy").parse(this.sDateTask);
     }
 
-    public Task(String rowId, String aTaskName, String aDescTask, String aDateTask) throws ParseException {
+    public Task(long rowId, String aTaskName, String aDescTask, String aDateTask) throws ParseException {
         this.rowId = rowId;
         this.taskName = aTaskName;
         this.descTask = aDescTask;
@@ -27,11 +27,15 @@ public class Task {
         this.dateTask   = new SimpleDateFormat("dd-MMM-yyyy").parse(this.sDateTask);
     }
 
-    public String getRowId() {
+    public long getRowId() {
         return rowId;
     }
 
-    public void setRowId(String rowId) {
+    public String getsRowId() {
+        return String.valueOf(rowId);
+    }
+
+    public void setRowId(long rowId) {
         this.rowId = rowId;
     }
 

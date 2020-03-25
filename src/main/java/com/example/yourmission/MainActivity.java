@@ -59,13 +59,16 @@ public class MainActivity extends AppCompatActivity{
                 final String aTaskName = list.get(position).getTaskName();
                 final String aTaskDesc = list.get(position).getDescTask();
                 final String aTaskDate = list.get(position).getsDateTask();
+
+                db.open();
+                db.deleteContact(list.get(position).getRowId());
+                db.close();
+
+
                 list.remove(position);
                 Toast.makeText(MainActivity.this, "Item Removed" + position, Toast.LENGTH_SHORT).show();
                 Adapter.notifyItemRemoved(position);
 
-                db.open();
-                db.deleteContact(position);
-                db.close();
 
                 Snackbar.make(recyclerView, aTaskName, Snackbar.LENGTH_LONG)
                         .setAction("Undo", new View.OnClickListener() {
@@ -144,7 +147,7 @@ public class MainActivity extends AppCompatActivity{
         if(c.moveToFirst()){
             do {
                 try {
-                    list.add(new Task(c.getString(0),c.getString(1),c.getString(2),c.getString(3)));
+                    list.add(new Task(c.getLong(0),c.getString(1),c.getString(2),c.getString(3)));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
