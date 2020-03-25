@@ -16,7 +16,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity{
     // Kamus Data.
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity{
         // Menampilkan Card View.
         recyclerView = findViewById(R.id.rv_task);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        Adapter = new CardViewTaskAdapter(list, MainActivity.this);
+        Adapter = new CardViewTaskAdapter(list);
         recyclerView.setAdapter(Adapter);
         // Swipe to Delete.
         deleteData();
@@ -58,7 +60,7 @@ public class MainActivity extends AppCompatActivity{
                 final int position = viewHolder.getAdapterPosition();
                 final String aTaskName = list.get(position).getTaskName();
                 final String aTaskDesc = list.get(position).getDescTask();
-                final String aTaskDate = list.get(position).getsDateTask();
+                final String aTaskDate = list.get(position).getDateTask();
 
                 db.open();
                 db.deleteContact(list.get(position).getRowId());
@@ -76,7 +78,9 @@ public class MainActivity extends AppCompatActivity{
                             public void onClick(View v) {
                                 Task aTask = null;
                                 try {
-                                    aTask = new Task(aTaskName, aTaskDesc, aTaskDate);
+                                    String date = aTaskDate;
+                                    Date aDate = new SimpleDateFormat("dd-MMM-yyyy").parse(date);
+                                    aTask = new Task(aTaskName, aTaskDesc, aDate);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
@@ -116,15 +120,16 @@ public class MainActivity extends AppCompatActivity{
                     String namaTugas = bundle.getString("namaTugas");
                     String descTugas = bundle.getString("descTugas");
                     String dateTugas = bundle.getString("dateTugas");
-                    Task aTask = null;
+                    Date aDateTugas  = null;
                     try {
-                        aTask = new Task(namaTugas, descTugas, dateTugas);
+                        aDateTugas = new SimpleDateFormat("dd-MMM-yyyy").parse(dateTugas);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
+                    Task aTask = new Task(namaTugas, descTugas, aDateTugas);
                     // Coba ke DB.
                     insertTaskToDatabase(aTask);
-                    selectAllTaskFromDatabase();
+                    list.add(aTask);
                     Adapter.notifyDataSetChanged();
                     Toast.makeText(this, "Data berhasil disimpan.", Toast.LENGTH_LONG).show();
                 } else {
@@ -136,7 +141,8 @@ public class MainActivity extends AppCompatActivity{
     // Insert data Task ke dalam Database.
     private void insertTaskToDatabase(Task aTask){
         db.open();
-        long id = db.insertTask(aTask.getTaskName(), aTask.getDescTask(), aTask.getsDateTask());
+        String dateTask = aTask.getDateTask();
+        long id = db.insertTask(aTask.getTaskName(), aTask.getDescTask(), dateTask);
         db.close();
     }
 
@@ -147,7 +153,9 @@ public class MainActivity extends AppCompatActivity{
         if(c.moveToFirst()){
             do {
                 try {
-                    list.add(new Task(c.getLong(0),c.getString(1),c.getString(2),c.getString(3)));
+                    String date = c.getString(3);
+                    Date aDate = new SimpleDateFormat("dd-MMM-yyyy").parse(date);
+                    list.add(new Task(c.getLong(0),c.getString(1),c.getString(2),aDate));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

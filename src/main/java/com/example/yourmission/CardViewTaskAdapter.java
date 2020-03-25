@@ -1,6 +1,5 @@
 package com.example.yourmission;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,10 +14,9 @@ import java.util.ArrayList;
 
 public class CardViewTaskAdapter extends RecyclerView.Adapter<CardViewTaskAdapter.CardViewViewHolder> {
     private ArrayList<Task> listTask;
-    private Context context;
-    public CardViewTaskAdapter(ArrayList<Task> list, Context aContext) {
+
+    CardViewTaskAdapter(ArrayList<Task> list) {
         this.listTask = list;
-        this.context = aContext;
     }
     @NonNull
     @Override
@@ -43,7 +39,7 @@ public class CardViewTaskAdapter extends RecyclerView.Adapter<CardViewTaskAdapte
             public void onClick(View v) {
                 // Lokasi Passing Data
                 Bundle bundle = new Bundle();
-                bundle.putString("rowId", task.getsRowId());
+                bundle.putLong("rowId", task.getRowId());
                 bundle.putString("namaTugas", task.getTaskName());
                 bundle.putString("descTugas", task.getDescTask());
                 bundle.putString("deadlineTugas", task.getTanggal() + "-" + task.getBulan() + "-" + task.getTahun());
@@ -59,10 +55,10 @@ public class CardViewTaskAdapter extends RecyclerView.Adapter<CardViewTaskAdapte
         return listTask.size();
     }
 
-    public class CardViewViewHolder extends RecyclerView.ViewHolder {
+    class CardViewViewHolder extends RecyclerView.ViewHolder {
         TextView namaTugas, descTugas, tanggalDeadline, bulanDeadline, tahunDeadline;
         CardView cardView;
-        public CardViewViewHolder(@NonNull View itemView) {
+        CardViewViewHolder(@NonNull View itemView) {
             super(itemView);
             cardView        = itemView.findViewById(R.id.cardView);
             namaTugas       = itemView.findViewById(R.id.namaTugas);

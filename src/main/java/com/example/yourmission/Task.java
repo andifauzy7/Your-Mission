@@ -1,80 +1,58 @@
 package com.example.yourmission;
+import android.annotation.SuppressLint;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Task {
+class Task {
 
     private long rowId;
     private String taskName;
     private String descTask;
-    private String sDateTask;
     private Date dateTask;
 
-    public Task(String aTaskName, String aDescTask, String aDateTask) throws ParseException {
+    // Constructor.
+    Task(String aTaskName, String aDescTask, Date aDate) {
         this.taskName = aTaskName;
         this.descTask = aDescTask;
-        this.sDateTask = aDateTask;
-        this.dateTask   = new SimpleDateFormat("dd-MMM-yyyy").parse(this.sDateTask);
+        this.dateTask   = aDate;
     }
 
-    public Task(long rowId, String aTaskName, String aDescTask, String aDateTask) throws ParseException {
+    Task(long rowId, String aTaskName, String aDescTask, Date aDateTask) {
         this.rowId = rowId;
         this.taskName = aTaskName;
         this.descTask = aDescTask;
-        this.sDateTask = aDateTask;
-        this.dateTask   = new SimpleDateFormat("dd-MMM-yyyy").parse(this.sDateTask);
+        this.dateTask   = aDateTask;
     }
 
-    public long getRowId() {
+    // Getter.
+    long getRowId() {
         return rowId;
     }
 
-    public String getsRowId() {
-        return String.valueOf(rowId);
+    @SuppressLint("DefaultLocale")
+    String getDateTask(){
+        return String.format("%td-%tb-%tY", this.dateTask, this.dateTask, this.dateTask);
     }
 
-    public void setRowId(long rowId) {
-        this.rowId = rowId;
-    }
-
-    public String getsDateTask() {
-        return sDateTask;
-    }
-
-    public void setDateTask(String dateTask) throws ParseException {
-        this.sDateTask  = dateTask;
-        this.dateTask   = new SimpleDateFormat("dd-MMM-yyyy").parse(this.sDateTask);
-    }
-
-    public String getTaskName() {
+    String getTaskName() {
         return taskName;
     }
 
-    public void setTaskName(String taskName) {
-        this.taskName = taskName;
-    }
-
-    public String getDescTask() {
+    String getDescTask() {
         return descTask;
     }
 
-    public void setDescTask(String descTask) {
-        this.descTask = descTask;
-    }
-
-    public String getTanggal(){
+    @SuppressLint("DefaultLocale")
+    String getTanggal(){
         return String.format("%td",this.dateTask);
     }
 
-    public String getBulan(){
+    String getBulan(){
         return String.format("%tb",this.dateTask).toUpperCase();
     }
 
-    public String getTahun(){
+    String getTahun(){
         return String.format("%tY",this.dateTask);
     }
-
 }
 

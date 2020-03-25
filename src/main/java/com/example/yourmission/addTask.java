@@ -30,12 +30,13 @@ public class addTask extends AppCompatActivity {
 
     // Jika tombol setting tanggal ditap.
     private void setupDateButton(){
-        Button datePicker  = (Button)findViewById(R.id.datePicker);
-        this.dateView = (TextView)findViewById(R.id.dateView);
+        Button datePicker  = findViewById(R.id.datePicker);
+        this.dateView = findViewById(R.id.dateView);
         datePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar newCalendar = Calendar.getInstance();
+                Calendar newCalendar;
+                newCalendar = Calendar.getInstance();
                 DatePickerDialog datePickerDialog = new DatePickerDialog(addTask.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -54,13 +55,13 @@ public class addTask extends AppCompatActivity {
 
     // Jika tombol sumbit ditap.
     private void setupSubmitButton(){
-        Button btn = (Button)findViewById(R.id.submitData);
+        Button btn = findViewById(R.id.submitData);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Extract data.
-                namaTugas = (EditText)findViewById(R.id.txNamaTugas);
-                descTugas = (EditText)findViewById(R.id.txDescTugas);
+                namaTugas = findViewById(R.id.txNamaTugas);
+                descTugas = findViewById(R.id.txDescTugas);
                 String sNamaTugas  = namaTugas.getText().toString();
                 String sDescTugas  = descTugas.getText().toString();
                 String sDateTugas  = dateView.getText().toString();

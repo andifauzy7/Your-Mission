@@ -8,26 +8,26 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class DBAdapter {
-    static final String KEY_ROWID   = "_id";
-    static final String KEY_NAME    = "name";
-    static final String KEY_DESC    = "description";
-    static final String KEY_DATE    = "deadline";
-    static final String TAG         = "DB Adapter";
-    static final String DB_NAME     = "MyDB";
-    static final String DB_TABLE    = "task";
-    static final int    DB_VERSION  = 1;
-    static final String DB_CREATE   = "create table "
+class DBAdapter {
+    private static final String KEY_ROWID   = "_id";
+    private static final String KEY_NAME    = "name";
+    private static final String KEY_DESC    = "description";
+    private static final String KEY_DATE    = "deadline";
+    private static final String TAG         = "DB Adapter";
+    private static final String DB_NAME     = "MyDB";
+    private static final String DB_TABLE    = "task";
+    private static final int    DB_VERSION  = 1;
+    private static final String DB_CREATE   = "create table "
             + DB_TABLE + "("
             + KEY_ROWID + " integer primary key autoincrement, "
             + KEY_NAME + " text not null, "
             + KEY_DESC + " text not null, "
             + KEY_DATE + " text not null);";
-    final Context context;
-    DatabaseHelper DBHelper;
-    SQLiteDatabase db;
+    private final Context context;
+    private DatabaseHelper DBHelper;
+    private SQLiteDatabase db;
 
-    public DBAdapter(Context ctx){
+    DBAdapter(Context ctx){
         this.context = ctx;
         DBHelper = new DatabaseHelper(context);
     }
@@ -54,18 +54,18 @@ public class DBAdapter {
     }
 
     // Open the database
-    public DBAdapter open(){
+    DBAdapter open(){
         db = DBHelper.getWritableDatabase();
         return this;
     }
 
     // Close the database
-    public void close(){
+    void close(){
         DBHelper.close();
     }
 
     // Insert a task
-    public long insertTask(String nameTask, String descTask, String deadlineTask){
+    long insertTask(String nameTask, String descTask, String deadlineTask){
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_NAME, nameTask);
         initialValues.put(KEY_DESC, descTask);
@@ -73,7 +73,7 @@ public class DBAdapter {
         return db.insert(DB_TABLE, null, initialValues);
     }
 
-    public long insertTask(String rowId, String nameTask, String descTask, String deadlineTask){
+    long insertTask(String rowId, String nameTask, String descTask, String deadlineTask){
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_ROWID, rowId);
         initialValues.put(KEY_NAME, nameTask);
@@ -83,21 +83,12 @@ public class DBAdapter {
     }
 
     // Retrieve data.
-    public Cursor getAllTask(){
+    Cursor getAllTask(){
         return db.query(DB_TABLE, new String[] {KEY_ROWID, KEY_NAME, KEY_DESC, KEY_DATE}, null, null, null, null, null);
     }
 
-    // retrieve a particular contacts.
-    public Cursor getTask(long RowId) throws SQLException {
-        Cursor mCursor = db.query(true, DB_TABLE, new String[] {KEY_ROWID, KEY_NAME, KEY_DESC, KEY_DATE}, KEY_ROWID + "=" + RowId, null, null, null, null, null);
-        if(mCursor != null){
-            mCursor.moveToFirst();
-        }
-        return mCursor;
-    }
-
     // Update Task.
-    public boolean updateTask(long RowId, String name, String description, String date){
+    boolean updateTask(long RowId, String name, String description, String date){
         ContentValues args = new ContentValues();
         args.put(KEY_NAME, name);
         args.put(KEY_DESC, description);
@@ -105,8 +96,9 @@ public class DBAdapter {
         return db.update(DB_TABLE, args, KEY_ROWID + "=" + RowId, null) > 0;
     }
 
+
     // Delete Task.
-    public boolean deleteContact(long rowId){
+    boolean deleteContact(long rowId){
         return db.delete(DB_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
     }
 }

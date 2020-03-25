@@ -1,8 +1,6 @@
 package com.example.yourmission;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +10,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -28,20 +25,20 @@ public class DetailTask extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_task);
-
-        namaTugas = (EditText) findViewById(R.id.txNamaTugas);
-        descTugas = (EditText) findViewById(R.id.txDescTugas);
-        deadlineTugas = (TextView) findViewById(R.id.dateView);
+        namaTugas = findViewById(R.id.txNamaTugas);
+        descTugas = findViewById(R.id.txDescTugas);
+        deadlineTugas = findViewById(R.id.dateView);
+        assert bundle != null;
         namaTugas.setText(bundle.getString("namaTugas"));
         descTugas.setText(bundle.getString("descTugas"));
         deadlineTugas.setText(bundle.getString("deadlineTugas"));
         setupDateButton();
-        setupSubmitButton(bundle.getString("rowId"));
+        setupSubmitButton(bundle.getLong("rowId"));
     }
 
     // Jika tombol setting tanggal ditap.
     private void setupDateButton(){
-        Button datePicker  = (Button)findViewById(R.id.datePicker);
+        Button datePicker  = findViewById(R.id.datePicker);
         datePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,26 +60,25 @@ public class DetailTask extends AppCompatActivity {
     }
 
     // Jika tombol sumbit ditap.
-    private void setupSubmitButton(final String srowId){
-        Button btn = (Button)findViewById(R.id.submitData);
+    private void setupSubmitButton(final long srowId){
+        Button btn = findViewById(R.id.submitData);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Extract data.
-                int rowId = Integer.parseInt(srowId);
-                namaTugas = (EditText)findViewById(R.id.txNamaTugas);
-                descTugas = (EditText)findViewById(R.id.txDescTugas);
+                namaTugas = findViewById(R.id.txNamaTugas);
+                descTugas = findViewById(R.id.txDescTugas);
                 String sNamaTugas  = namaTugas.getText().toString();
                 String sDescTugas  = descTugas.getText().toString();
                 String sDateTugas  = deadlineTugas.getText().toString();
                 // Pass data.
                 if(sNamaTugas.equals("") || sDescTugas.equals("") || sDateTugas.equals("")){
-                    Toast.makeText(DetailTask.this,"Data task kurang lengkap.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DetailTask.this,"GAGAL : Data Kurang Lengkap.",Toast.LENGTH_SHORT).show();
                 } else {
                     db.open();
-                    db.updateTask(rowId, sNamaTugas, sDescTugas, sDateTugas);
+                    db.updateTask(srowId, sNamaTugas, sDescTugas, sDateTugas);
                     db.close();
-                    Toast.makeText(DetailTask.this,"Update data berhasil!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DetailTask.this,"SUKSES : Data Diperbaharui.",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(DetailTask.this, MainActivity.class);
                     startActivity(intent);
                 }
