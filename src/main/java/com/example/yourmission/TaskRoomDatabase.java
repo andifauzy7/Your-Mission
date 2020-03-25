@@ -38,11 +38,6 @@ public abstract class TaskRoomDatabase extends RoomDatabase {
             super.onOpen(db);
             databaseWriteExecutor.execute(()->{
                 TaskDAO dao = INSTANCE.taskDAO();
-                Task task = new Task();
-                task.setTaskName("Task Name 1");
-                task.setDescTask("Task Desc 1");
-                task.setTextDateTask("22-JAN-2020");
-                dao.insertTask(task);
             });
         }
     };

@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity{
         Adapter = new CardViewTaskAdapter(this);
         recyclerView.setAdapter(Adapter);
 
+        // Instansiasi ViewModel & Read Data dari DB.
         mTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
         mTaskViewModel.getAllTasks().observe(this, new Observer<List<Task>>() {
             @Override
