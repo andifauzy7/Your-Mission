@@ -1,6 +1,8 @@
 package com.example.yourmission;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class DetailTask extends AppCompatActivity {
+    private TaskViewModel mTaskViewModel;
     EditText namaTugas, descTugas;
     TextView deadlineTugas;
     /*
@@ -30,6 +33,9 @@ public class DetailTask extends AppCompatActivity {
         namaTugas = findViewById(R.id.txNamaTugas);
         descTugas = findViewById(R.id.txDescTugas);
         deadlineTugas = findViewById(R.id.dateView);
+
+        mTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+
         assert bundle != null;
         namaTugas.setText(bundle.getString("namaTugas"));
         descTugas.setText(bundle.getString("descTugas"));
@@ -63,7 +69,6 @@ public class DetailTask extends AppCompatActivity {
 
     // Jika tombol sumbit ditap.
     private void setupSubmitButton(final long srowId){
-        /*
         Button btn = findViewById(R.id.submitData);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,15 +83,16 @@ public class DetailTask extends AppCompatActivity {
                 if(sNamaTugas.equals("") || sDescTugas.equals("") || sDateTugas.equals("")){
                     Toast.makeText(DetailTask.this,"GAGAL : Data Kurang Lengkap.",Toast.LENGTH_SHORT).show();
                 } else {
-                    db.open();
-                    db.updateTask(srowId, sNamaTugas, sDescTugas, sDateTugas);
-                    db.close();
+                    Task aTask = new Task();
+                    aTask.setRowId(srowId);
+                    aTask.setTaskName(sNamaTugas);
+                    aTask.setDescTask(sDescTugas);
+                    aTask.setTextDateTask(sDateTugas);
+                    mTaskViewModel.update(aTask);
                     Toast.makeText(DetailTask.this,"SUKSES : Data Diperbaharui.",Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(DetailTask.this, MainActivity.class);
-                    startActivity(intent);
+                    finish();
                 }
             }
         });
-    */
     }
 }

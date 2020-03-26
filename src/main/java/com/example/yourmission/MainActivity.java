@@ -29,6 +29,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity{
     // Kamus Data.
+    List<Task> cloneTasks;
     private TaskViewModel mTaskViewModel;
     public static final int REQUEST_CODE_ADD = 1;
     FloatingActionButton addButton;
@@ -51,6 +52,8 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onChanged(List<Task> tasks) {
                 Adapter.setListTask(tasks);
+                cloneTasks = tasks;
+
             }
         });
 
@@ -63,7 +66,6 @@ public class MainActivity extends AppCompatActivity{
 
     // Swipe delete
     private void deleteData(){
-        /*
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -73,44 +75,23 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 final int position = viewHolder.getAdapterPosition();
-                final String aTaskName = list.get(position).getTaskName();
-                final String aTaskDesc = list.get(position).getDescTask();
-                final String aTaskDate = list.get(position).getDateTask();
-
-                db.open();
-                db.deleteContact(list.get(position).getRowId());
-                db.close();
-
-
-                list.remove(position);
+                final Task aTask = cloneTasks.get(position);
+                Task bTask = new Task();
+                bTask.setRowId(aTask.getRowId());
+                bTask.setTaskName(aTask.getTaskName());
+                bTask.setDescTask(aTask.getDescTask());
+                bTask.setTextDateTask(aTask.getTextDateTask());
+                mTaskViewModel.delete(aTask);
                 Toast.makeText(MainActivity.this, "Item Removed" + position, Toast.LENGTH_SHORT).show();
-                Adapter.notifyItemRemoved(position);
-
-
-                Snackbar.make(recyclerView, aTaskName, Snackbar.LENGTH_LONG)
+                Snackbar.make(recyclerView, bTask.getTaskName(), Snackbar.LENGTH_LONG)
                         .setAction("Undo", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Task aTask = null;
-                                try {
-                                    @SuppressLint("SimpleDateFormat")
-                                    Date aDate = new SimpleDateFormat("dd-MMM-yyyy").parse(aTaskDate);
-                                    aTask = new Task(aTaskName, aTaskDesc, aDate);
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-
-                                db.open();
-                                db.insertTask(String.valueOf(position), aTaskName, aTaskDesc, aTaskDate);
-                                db.close();
-
-                                list.add(position, aTask);
-                                Adapter.notifyItemInserted(position);
+                                mTaskViewModel.insert(bTask);
                             }
                         }).show();
             }
         }).attachToRecyclerView(recyclerView);
-        */
     }
 
     // Jika tombol Add task di tap.

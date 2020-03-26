@@ -25,4 +25,16 @@ class TaskRepository {
             mTaskDao.insertTask(task);
         });
     }
+
+    void update(Task task){
+        TaskRoomDatabase.databaseWriteExecutor.execute(()->{
+            mTaskDao.updateTask(task);
+        });
+    }
+
+    void delete(Task task){
+        TaskRoomDatabase.databaseWriteExecutor.execute(()->{
+            mTaskDao.deleteTask(task);
+        });
+    }
 }
